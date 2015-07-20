@@ -39,11 +39,11 @@ public class TestDb extends AndroidTestCase {
     }
 
     private void deleteTheDatabase() {
-        mContext.deleteDatabase(WeatherDbHelper.DATABASE_NAME);
+        mContext.deleteDatabase(ToiesDbHelper.DATABASE_NAME);
     }
 
     public void testCreateDb() throws Throwable {
-        SQLiteDatabase db = new WeatherDbHelper(this.mContext).getWritableDatabase();
+        SQLiteDatabase db = new ToiesDbHelper(this.mContext).getWritableDatabase();
         checkTables(db);
         checkColumns(db);
         db.close();
@@ -87,7 +87,7 @@ public class TestDb extends AndroidTestCase {
 
     public void testInsertOneRecordForEachTable() {
 
-        WeatherDbHelper dbHelper = new WeatherDbHelper(mContext);
+        ToiesDbHelper dbHelper = new ToiesDbHelper(mContext);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
         TableFactory tableFactory = new TableFactory();

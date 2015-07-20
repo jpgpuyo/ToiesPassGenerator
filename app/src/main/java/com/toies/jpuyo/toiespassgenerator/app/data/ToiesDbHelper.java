@@ -24,14 +24,14 @@ import com.toies.jpuyo.toiespassgenerator.app.data.PlayerContract.PlayerEntry;
 /**
  * Manages a local database for weather data.
  */
-public class WeatherDbHelper extends SQLiteOpenHelper {
+public class ToiesDbHelper extends SQLiteOpenHelper {
 
     // If you change the database schema, you must increment the database version.
     private static final int DATABASE_VERSION = 1;
 
     static final String DATABASE_NAME = "toies.db";
 
-    public WeatherDbHelper(Context context) {
+    public ToiesDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
