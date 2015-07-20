@@ -1,10 +1,8 @@
 package com.toies.jpuyo.toiespassgenerator.app.data;
 
 import android.content.ContentValues;
-import android.content.Context;
 import android.database.ContentObserver;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -17,12 +15,10 @@ import java.util.Set;
 
 /*
     Students: These are functions and some test data to make it easier to test your database and
-    Content Provider.  Note that you'll want your ToiaContract class to exactly match the one
+    Content Provider.  Note that you'll want your PlayerContract class to exactly match the one
     in our solution to use these as-given.
  */
 public class TestUtilities extends AndroidTestCase {
-    static final String TEST_LOCATION = "99705";
-    static final long TEST_DATE = 1419033600L;  // December 20th, 2014
 
     static void validateCursor(String error, Cursor valueCursor, ContentValues expectedValues) {
         assertTrue("Empty cursor returned. " + error, valueCursor.moveToFirst());
@@ -46,11 +42,57 @@ public class TestUtilities extends AndroidTestCase {
     /*
         Students: Use this to create some default weather values for your database tests.
      */
-    static ContentValues createToiaValues(long locationRowId) {
-        ContentValues toiaValues = new ContentValues();
-        toiaValues.put(ToiaContract.ToiaEntry.COLUMN_TOIA_ID, 321);
-        toiaValues.put(ToiaContract.ToiaEntry.COLUMN_NAME, "Douglas");
-        return toiaValues;
+    static ContentValues createPlayerValues() {
+        ContentValues playerValues = new ContentValues();
+        playerValues.put(PlayerContract.PlayerEntry.NUMBER, 13);
+        playerValues.put(PlayerContract.PlayerEntry.NAME, "Claudio Bravo");
+        /*playerValues.put(PlayerContract.PlayerEntry.NUMBER, 25);
+        playerValues.put(PlayerContract.PlayerEntry.NAME, "Jordi Masip");
+        playerValues.put(PlayerContract.PlayerEntry.NUMBER, 1);
+        playerValues.put(PlayerContract.PlayerEntry.NAME, "Marc-Andre ter Stegen");
+        playerValues.put(PlayerContract.PlayerEntry.NUMBER, 21);
+        playerValues.put(PlayerContract.PlayerEntry.NAME, "Adriano");
+        playerValues.put(PlayerContract.PlayerEntry.NUMBER, 15);
+        playerValues.put(PlayerContract.PlayerEntry.NAME, "Bartra");
+        playerValues.put(PlayerContract.PlayerEntry.NUMBER, 22);
+        playerValues.put(PlayerContract.PlayerEntry.NAME, "Dani Alves");
+        playerValues.put(PlayerContract.PlayerEntry.NUMBER, 33);
+        playerValues.put(PlayerContract.PlayerEntry.NAME, "Diawandou Diagne");
+        playerValues.put(PlayerContract.PlayerEntry.NUMBER, 16);
+        playerValues.put(PlayerContract.PlayerEntry.NAME, "Douglas");
+        playerValues.put(PlayerContract.PlayerEntry.NUMBER, 18);
+        playerValues.put(PlayerContract.PlayerEntry.NAME, "Jordi Alba");
+        playerValues.put(PlayerContract.PlayerEntry.NUMBER, 24);
+        playerValues.put(PlayerContract.PlayerEntry.NAME, "Jeremy Mathieu");
+        playerValues.put(PlayerContract.PlayerEntry.NUMBER, 3);
+        playerValues.put(PlayerContract.PlayerEntry.NAME, "Pique");
+        playerValues.put(PlayerContract.PlayerEntry.NUMBER, 23);
+        playerValues.put(PlayerContract.PlayerEntry.NAME, "Thomas Vermaelen");
+        playerValues.put(PlayerContract.PlayerEntry.NUMBER, 5);
+        playerValues.put(PlayerContract.PlayerEntry.NAME, "Busquets");
+        playerValues.put(PlayerContract.PlayerEntry.NUMBER, 30);
+        playerValues.put(PlayerContract.PlayerEntry.NAME, "Alen Halilovic");
+        playerValues.put(PlayerContract.PlayerEntry.NUMBER, 8);
+        playerValues.put(PlayerContract.PlayerEntry.NAME, "Iniesta");
+        playerValues.put(PlayerContract.PlayerEntry.NUMBER, 14);
+        playerValues.put(PlayerContract.PlayerEntry.NAME, "Mascherano");
+        playerValues.put(PlayerContract.PlayerEntry.NUMBER, 12);
+        playerValues.put(PlayerContract.PlayerEntry.NAME, "Rafinha");
+        playerValues.put(PlayerContract.PlayerEntry.NUMBER, 4);
+        playerValues.put(PlayerContract.PlayerEntry.NAME, "Ivan Rakitic");
+        playerValues.put(PlayerContract.PlayerEntry.NUMBER, 20);
+        playerValues.put(PlayerContract.PlayerEntry.NAME, "Sergi Roberto");
+        playerValues.put(PlayerContract.PlayerEntry.NUMBER, 10);
+        playerValues.put(PlayerContract.PlayerEntry.NAME, "Lionel Messi");
+        playerValues.put(PlayerContract.PlayerEntry.NUMBER, 31);
+        playerValues.put(PlayerContract.PlayerEntry.NAME, "Munir");
+        playerValues.put(PlayerContract.PlayerEntry.NUMBER, 11);
+        playerValues.put(PlayerContract.PlayerEntry.NAME, "Neymar");
+        playerValues.put(PlayerContract.PlayerEntry.NUMBER, 7);
+        playerValues.put(PlayerContract.PlayerEntry.NAME, "Pedro");
+        playerValues.put(PlayerContract.PlayerEntry.NUMBER, 9);
+        playerValues.put(PlayerContract.PlayerEntry.NAME, "Luis Suarez");*/
+        return playerValues;
     }
 
     /*

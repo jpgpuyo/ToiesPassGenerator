@@ -24,7 +24,7 @@ import android.text.format.Time;
 /**
  * Defines table and column names for the weather database.
  */
-public class ToiaContract {
+public class PlayerContract {
 
     // The "Content authority" is a name for the entire content provider, similar to the
     // relationship between a domain name and its website.  A convenient string to use for the
@@ -37,28 +37,28 @@ public class ToiaContract {
     public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
     // Possible paths (appended to base content URI for possible URI's)
-    // For instance, content://com.toies.jpuyo.toiespassgenerator.app/toia/ is a valid path for
+    // For instance, content://com.toies.jpuyo.toiespassgenerator.app/player/ is a valid path for
     // looking at weather data. content://com.toies.jpuyo.toiespassgenerator.app/givemeroot/ will fail,
     // as the ContentProvider hasn't been given any information on what to do with "givemeroot".
     // At least, let's hope not.  Don't be that dev, reader.  Don't be that dev.
-    public static final String PATH_TOIA = "toia";
+    public static final String PATH_PLAYER = "player";
 
     /* Inner class that defines the table contents of the Toies table */
-    public static final class ToiaEntry implements BaseColumns {
+    public static final class PlayerEntry implements BaseColumns {
 
         public static final Uri CONTENT_URI =
-                BASE_CONTENT_URI.buildUpon().appendPath(PATH_TOIA).build();
+                BASE_CONTENT_URI.buildUpon().appendPath(PATH_PLAYER).build();
 
         public static final String CONTENT_TYPE =
-                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_TOIA;
+                ContentResolver.CURSOR_DIR_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_PLAYER;
         public static final String CONTENT_ITEM_TYPE =
-                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_TOIA;
+                ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_PLAYER;
 
-        public static final String TABLE_NAME = "toia";
-        public static final String COLUMN_TOIA_ID = "toia_id";
-        public static final String COLUMN_NAME = "name";
+        public static final String TABLE_NAME = "player";
+        public static final String NUMBER = "number";
+        public static final String NAME = "name";
 
-        public static Uri buildToiaUri(long id) {
+        public static Uri buildPlayerUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
     }

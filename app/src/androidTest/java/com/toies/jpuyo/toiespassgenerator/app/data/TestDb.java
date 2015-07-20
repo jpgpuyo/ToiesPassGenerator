@@ -53,7 +53,7 @@ public class TestDb extends AndroidTestCase {
         // Note that there will be another table in the DB that stores the
         // Android metadata (db version information)
         final HashSet<String> tableNameHashSet = new HashSet<String>();
-        tableNameHashSet.add(ToiaContract.ToiaEntry.TABLE_NAME);
+        tableNameHashSet.add(PlayerContract.PlayerEntry.TABLE_NAME);
 
         mContext.deleteDatabase(WeatherDbHelper.DATABASE_NAME);
         SQLiteDatabase db = new WeatherDbHelper(
@@ -77,7 +77,7 @@ public class TestDb extends AndroidTestCase {
                 tableNameHashSet.isEmpty());
 
         // now, do our tables contain the correct columns?
-        c = db.rawQuery("PRAGMA table_info(" + ToiaContract.ToiaEntry.TABLE_NAME + ")",
+        c = db.rawQuery("PRAGMA table_info(" + PlayerContract.PlayerEntry.TABLE_NAME + ")",
                 null);
 
         assertTrue("Error: This means that we were unable to query the database for table information.",
@@ -85,8 +85,8 @@ public class TestDb extends AndroidTestCase {
 
         // Build a HashSet of all of the column names we want to look for
         final HashSet<String> locationColumnHashSet = new HashSet<String>();
-        locationColumnHashSet.add(ToiaContract.ToiaEntry.COLUMN_TOIA_ID);
-        locationColumnHashSet.add(ToiaContract.ToiaEntry.COLUMN_NAME);
+        locationColumnHashSet.add(PlayerContract.PlayerEntry.NUMBER);
+        locationColumnHashSet.add(PlayerContract.PlayerEntry.NAME);
 
         int columnNameIndex = c.getColumnIndex("name");
         do {
@@ -96,35 +96,29 @@ public class TestDb extends AndroidTestCase {
 
         // if this fails, it means that your database doesn't contain all of the required location
         // entry columns
-        assertTrue("Error: The database doesn't contain all of the required toia entry columns",
+        assertTrue("Error: The database doesn't contain all of the required Player entry columns",
                 locationColumnHashSet.isEmpty());
         db.close();
     }
 
-    /*
-        Students:  Here is where you will build code to test that we can insert and query the
-        database.  We've done a lot of work for you.  You'll want to look in TestUtilities
-        where you can use the "createWeatherValues" function.  You can
-        also make use of the validateCurrentRecord function from within TestUtilities.
-     */
-    /*public void testWeatherTable() {
+    public void testPlayerTable() {
         // First step: Get reference to writable database
         // If there's an error in those massive SQL table creation Strings,
         // errors will be thrown here when you try to get a writable database.
         WeatherDbHelper dbHelper = new WeatherDbHelper(mContext);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        // Second Step (Weather): Create weather values
-        ContentValues weatherValues = TestUtilities.createWeatherValues(locationRowId);
+        // Second Step (Weather): Create player values
+        ContentValues playerValues = TestUtilities.createPlayerValues();
 
         // Third Step (Weather): Insert ContentValues into database and get a row ID back
-        long weatherRowId = db.insert(ToiaContract.WeatherEntry.TABLE_NAME, null, weatherValues);
+        long weatherRowId = db.insert(PlayerContract.PlayerEntry.TABLE_NAME, null, playerValues);
         assertTrue(weatherRowId != -1);
 
         // Fourth Step: Query the database and receive a Cursor back
         // A cursor is your primary interface to the query results.
-        Cursor weatherCursor = db.query(
-                ToiaContract.WeatherEntry.TABLE_NAME,  // Table to Query
+        Cursor playerCursor = db.query(
+                PlayerContract.PlayerEntry.TABLE_NAME,  // Table to Query
                 null, // leaving "columns" null just returns all the columns.
                 null, // cols for "where" clause
                 null, // values for "where" clause
@@ -134,18 +128,18 @@ public class TestDb extends AndroidTestCase {
         );
 
         // Move the cursor to the first valid database row and check to see if we have any rows
-        assertTrue( "Error: No Records returned from location query", weatherCursor.moveToFirst() );
+        assertTrue( "Error: No Records returned from Player query", playerCursor.moveToFirst() );
 
         // Fifth Step: Validate the location Query
-        TestUtilities.validateCurrentRecord("testInsertReadDb weatherEntry failed to validate",
-                weatherCursor, weatherValues);
+        TestUtilities.validateCurrentRecord("testInsertReadDb PlayerEntry failed to validate",
+                playerCursor, playerValues);
 
         // Move the cursor to demonstrate that there is only one record in the database
         assertFalse( "Error: More than one record returned from weather query",
-                weatherCursor.moveToNext() );
+                playerCursor.moveToNext() );
 
         // Sixth Step: Close cursor and database
-        weatherCursor.close();
+        playerCursor.close();
         dbHelper.close();
-    }*/
+    }
 }

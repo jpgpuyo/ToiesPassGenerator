@@ -19,7 +19,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.toies.jpuyo.toiespassgenerator.app.data.ToiaContract.ToiaEntry;
+import com.toies.jpuyo.toiespassgenerator.app.data.PlayerContract.PlayerEntry;
 
 /**
  * Manages a local database for weather data.
@@ -39,19 +39,19 @@ public class WeatherDbHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         // Create a table to hold locations.  A location consists of the string supplied in the
         // location setting, the city name, and the latitude and longitude
-        final String SQL_CREATE_TOIA_TABLE = "CREATE TABLE " + ToiaEntry.TABLE_NAME + " (" +
-                ToiaEntry._ID + " INTEGER PRIMARY KEY," +
-                ToiaEntry.COLUMN_TOIA_ID + " INTEGER NOT NULL, " +
-                ToiaEntry.COLUMN_NAME + " TEXT NOT NULL " +
+        final String SQL_CREATE_PLAYER_TABLE = "CREATE TABLE " + PlayerEntry.TABLE_NAME + " (" +
+                PlayerEntry._ID + " INTEGER PRIMARY KEY," +
+                PlayerEntry.NUMBER + " INTEGER NOT NULL, " +
+                PlayerEntry.NAME + " TEXT NOT NULL " +
                 " );";
 
 
-        sqLiteDatabase.execSQL(SQL_CREATE_TOIA_TABLE);
+        sqLiteDatabase.execSQL(SQL_CREATE_PLAYER_TABLE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int oldVersion, int newVersion) {
-        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + ToiaEntry.TABLE_NAME);
+        sqLiteDatabase.execSQL("DROP TABLE IF EXISTS " + PlayerEntry.TABLE_NAME);
         onCreate(sqLiteDatabase);
     }
 }
