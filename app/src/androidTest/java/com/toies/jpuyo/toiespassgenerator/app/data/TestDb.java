@@ -25,65 +25,52 @@ import java.util.HashSet;
 public class TestDb extends AndroidTestCase {
 
     public static final String LOG_TAG = TestDb.class.getSimpleName();
+    private final HashSet<String> tableNameHashSet = new HashSet<String>();
 
-    // Since we want each test to start with a clean slate
-    void deleteTheDatabase() {
-        mContext.deleteDatabase(WeatherDbHelper.DATABASE_NAME);
-    }
-
-    /*
-        This function gets called before each test is executed to delete the database.  This makes
-        sure that we always have a clean test.
-     */
     public void setUp() {
         deleteTheDatabase();
+        tableNameHashSet.add(PlayerContract.PlayerEntry.TABLE_NAME);
     }
 
-    /*
-        Students: Uncomment this test once you've written the code to create the Location
-        table.  Note that you will have to have chosen the same column names that I did in
-        my solution for this test to compile, so if you haven't yet done that, this is
-        a good time to change your column names to match mine.
-
-        Note that this only tests that the Location table has the correct columns, since we
-        give you the code for the weather table.  This test does not look at the
-     */
-    public void testCreateDb() throws Throwable {
-        // build a HashSet of all of the table names we wish to look for
-        // Note that there will be another table in the DB that stores the
-        // Android metadata (db version information)
-        final HashSet<String> tableNameHashSet = new HashSet<String>();
-        tableNameHashSet.add(PlayerContract.PlayerEntry.TABLE_NAME);
-
+    // Since we want each test to start with a clean slate
+    private void deleteTheDatabase() {
         mContext.deleteDatabase(WeatherDbHelper.DATABASE_NAME);
-        SQLiteDatabase db = new WeatherDbHelper(
-                this.mContext).getWritableDatabase();
+    }
+
+    public void testCreateDb() throws Throwable {
+
+
+        SQLiteDatabase db = new WeatherDbHelper(this.mContext).getWritableDatabase();
+
+        checkTables(db);
+        checkColumns(db);
+
+        db.close();
+    }
+
+    private void checkTables(SQLiteDatabase db) throws Throwable {
         assertEquals(true, db.isOpen());
 
-        // have we created the tables we want?
         Cursor c = db.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
-
         assertTrue("Error: This means that the database has not been created correctly",
                 c.moveToFirst());
 
-        // verify that the tables have been created
         do {
             tableNameHashSet.remove(c.getString(0));
         } while( c.moveToNext() );
 
-        // if this fails, it means that your database doesn't contain both the location entry
-        // and weather entry tables
-        assertTrue("Error: Your database was created without both the location entry and weather entry tables",
+        assertTrue("Error: Your database was created without the correct tables",
                 tableNameHashSet.isEmpty());
+    }
 
-        // now, do our tables contain the correct columns?
-        c = db.rawQuery("PRAGMA table_info(" + PlayerContract.PlayerEntry.TABLE_NAME + ")",
+    private void checkColumns(SQLiteDatabase db) throws Throwable {
+
+        Cursor c = db.rawQuery("PRAGMA table_info(" + PlayerContract.PlayerEntry.TABLE_NAME + ")",
                 null);
 
         assertTrue("Error: This means that we were unable to query the database for table information.",
                 c.moveToFirst());
 
-        // Build a HashSet of all of the column names we want to look for
         final HashSet<String> locationColumnHashSet = new HashSet<String>();
         locationColumnHashSet.add(PlayerContract.PlayerEntry.NUMBER);
         locationColumnHashSet.add(PlayerContract.PlayerEntry.NAME);
@@ -94,11 +81,8 @@ public class TestDb extends AndroidTestCase {
             locationColumnHashSet.remove(columnName);
         } while(c.moveToNext());
 
-        // if this fails, it means that your database doesn't contain all of the required location
-        // entry columns
         assertTrue("Error: The database doesn't contain all of the required Player entry columns",
                 locationColumnHashSet.isEmpty());
-        db.close();
     }
 
     public void testPlayerTable() {
