@@ -20,6 +20,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
 
+import com.toies.jpuyo.toiespassgenerator.app.data.table.Table;
+import com.toies.jpuyo.toiespassgenerator.app.data.table.TableFactory;
+
+import java.util.ArrayList;
 import java.util.HashSet;
 
 public class TestDb extends AndroidTestCase {
@@ -32,19 +36,14 @@ public class TestDb extends AndroidTestCase {
         tableNameHashSet.add(PlayerContract.PlayerEntry.TABLE_NAME);
     }
 
-    // Since we want each test to start with a clean slate
     private void deleteTheDatabase() {
         mContext.deleteDatabase(WeatherDbHelper.DATABASE_NAME);
     }
 
     public void testCreateDb() throws Throwable {
-
-
         SQLiteDatabase db = new WeatherDbHelper(this.mContext).getWritableDatabase();
-
         checkTables(db);
         checkColumns(db);
-
         db.close();
     }
 
@@ -65,65 +64,58 @@ public class TestDb extends AndroidTestCase {
 
     private void checkColumns(SQLiteDatabase db) throws Throwable {
 
-        Cursor c = db.rawQuery("PRAGMA table_info(" + PlayerContract.PlayerEntry.TABLE_NAME + ")",
-                null);
+        TableFactory tableFactory = new TableFactory();
+        ArrayList<Table> tableList = tableFactory.getAllTables();
 
-        assertTrue("Error: This means that we were unable to query the database for table information.",
-                c.moveToFirst());
+        for (Table table : tableList) {
+            Cursor c = db.rawQuery("PRAGMA table_info(" + table.getName() + ")", null);
+            assertTrue("Error: This means that we were unable to query the database for table information from table " + table.getName(),
+                    c.moveToFirst());
 
-        final HashSet<String> locationColumnHashSet = new HashSet<String>();
-        locationColumnHashSet.add(PlayerContract.PlayerEntry.NUMBER);
-        locationColumnHashSet.add(PlayerContract.PlayerEntry.NAME);
-
-        int columnNameIndex = c.getColumnIndex("name");
-        do {
-            String columnName = c.getString(columnNameIndex);
-            locationColumnHashSet.remove(columnName);
-        } while(c.moveToNext());
-
-        assertTrue("Error: The database doesn't contain all of the required Player entry columns",
-                locationColumnHashSet.isEmpty());
+            HashSet<String> columnsHashSet = table.getColumnsSet();
+            int columnNameIndex = c.getColumnIndex("name");
+            do {
+                String columnName = c.getString(columnNameIndex);
+                columnsHashSet.remove(columnName);
+            } while(c.moveToNext());
+            assertTrue("Error: The database doesn't contain all of the required columns for the table " + table.getName(),
+                    columnsHashSet.isEmpty());
+        }
     }
 
-    public void testPlayerTable() {
-        // First step: Get reference to writable database
-        // If there's an error in those massive SQL table creation Strings,
-        // errors will be thrown here when you try to get a writable database.
+    public void testInsertOneRecordForEachTable() {
+
         WeatherDbHelper dbHelper = new WeatherDbHelper(mContext);
         SQLiteDatabase db = dbHelper.getWritableDatabase();
 
-        // Second Step (Weather): Create player values
-        ContentValues playerValues = TestUtilities.createPlayerValues();
+        TableFactory tableFactory = new TableFactory();
+        ArrayList<Table> tableList = tableFactory.getAllTables();
 
-        // Third Step (Weather): Insert ContentValues into database and get a row ID back
-        long weatherRowId = db.insert(PlayerContract.PlayerEntry.TABLE_NAME, null, playerValues);
-        assertTrue(weatherRowId != -1);
+        for (Table table : tableList) {
+            ContentValues tableValues = table.createValues();
+            long tableRowId = db.insert(table.getName(), null, tableValues);
+            assertTrue(tableRowId != -1);
 
-        // Fourth Step: Query the database and receive a Cursor back
-        // A cursor is your primary interface to the query results.
-        Cursor playerCursor = db.query(
-                PlayerContract.PlayerEntry.TABLE_NAME,  // Table to Query
-                null, // leaving "columns" null just returns all the columns.
-                null, // cols for "where" clause
-                null, // values for "where" clause
-                null, // columns to group by
-                null, // columns to filter by row groups
-                null  // sort order
-        );
+            Cursor tableCursor = db.query(
+                    table.getName(),  // Table to Query
+                    null, // leaving "columns" null just returns all the columns.
+                    null, // cols for "where" clause
+                    null, // values for "where" clause
+                    null, // columns to group by
+                    null, // columns to filter by row groups
+                    null  // sort order
+            );
+            assertTrue( "Error: No Records returned from " + table.getName() +" query", tableCursor.moveToFirst() );
 
-        // Move the cursor to the first valid database row and check to see if we have any rows
-        assertTrue( "Error: No Records returned from Player query", playerCursor.moveToFirst() );
+            TestUtilities.validateCurrentRecord("testInsertReadDb for table " + table.getName() + " failed to validate",
+                    tableCursor, tableValues);
 
-        // Fifth Step: Validate the location Query
-        TestUtilities.validateCurrentRecord("testInsertReadDb PlayerEntry failed to validate",
-                playerCursor, playerValues);
+            assertFalse("Error: More than one record returned from " + table.getName() + " query",
+                    tableCursor.moveToNext());
 
-        // Move the cursor to demonstrate that there is only one record in the database
-        assertFalse( "Error: More than one record returned from weather query",
-                playerCursor.moveToNext() );
+            tableCursor.close();
+        }
 
-        // Sixth Step: Close cursor and database
-        playerCursor.close();
         dbHelper.close();
     }
 }
