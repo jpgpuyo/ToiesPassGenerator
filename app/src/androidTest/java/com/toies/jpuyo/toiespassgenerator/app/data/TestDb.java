@@ -25,11 +25,13 @@ import com.toies.jpuyo.toiespassgenerator.app.data.table.TableFactory;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public class TestDb extends AndroidTestCase {
 
     public static final String LOG_TAG = TestDb.class.getSimpleName();
-    private final HashSet<String> tableNameHashSet = new HashSet<String>();
+    private final HashSet<String> tableNameHashSet = new HashSet<>();
 
     public void setUp() {
         deleteTheDatabase();
@@ -107,7 +109,7 @@ public class TestDb extends AndroidTestCase {
             );
             assertTrue( "Error: No Records returned from " + table.getName() +" query", tableCursor.moveToFirst() );
 
-            TestUtilities.validateCurrentRecord("testInsertReadDb for table " + table.getName() + " failed to validate",
+            validateCurrentRecord("testInsertReadDb for table " + table.getName() + " failed to validate",
                     tableCursor, tableValues);
 
             assertFalse("Error: More than one record returned from " + table.getName() + " query",
@@ -118,4 +120,18 @@ public class TestDb extends AndroidTestCase {
 
         dbHelper.close();
     }
+
+    private void validateCurrentRecord(String error, Cursor valueCursor, ContentValues expectedValues) {
+        Set<Map.Entry<String, Object>> valueSet = expectedValues.valueSet();
+        for (Map.Entry<String, Object> entry : valueSet) {
+            String columnName = entry.getKey();
+            int idx = valueCursor.getColumnIndex(columnName);
+            assertFalse("Column '" + columnName + "' not found. " + error, idx == -1);
+            String expectedValue = entry.getValue().toString();
+            assertEquals("Value '" + entry.getValue().toString() +
+                    "' did not match the expected value '" +
+                    expectedValue + "'. " + error, expectedValue, valueCursor.getString(idx));
+        }
+    }
+
 }
