@@ -35,17 +35,10 @@ public class TestJsonPlayerParser extends AndroidTestCase {
 
     public void testLoadJsonToSqlite() throws JSONException {
 
-        int recordsToInsert = 2;
+        int recordsToInsert = 649;
 
-        String jsonString =
-                "{ \"player\" :" +
-                        "[{\"player_id\":1,\"name\":\"Abelardo\"}," +
-                        " {\"player_id\":2,\"name\":\"Abellan\"}" +
-                        "]" +
-                        "}";
-
-        JsonPlayerParser jsql = new JsonPlayerParser(jsonString);
-        ContentValues[] bulkInsertContentValues = jsql.getContentValues();
+        JsonPlayerParser jsonPlayerParser = new JsonPlayerParser(mContext);
+        ContentValues[] bulkInsertContentValues = jsonPlayerParser.getContentValues();
 
         TestUtilities.TestContentObserver weatherObserver = TestUtilities.getTestContentObserver();
         mContext.getContentResolver().registerContentObserver(PlayerContract.PlayerEntry.CONTENT_URI, true, weatherObserver);
