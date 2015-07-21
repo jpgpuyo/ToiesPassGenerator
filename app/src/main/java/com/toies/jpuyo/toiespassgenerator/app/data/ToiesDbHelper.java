@@ -21,6 +21,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.toies.jpuyo.toiespassgenerator.app.data.PlayerContract.PlayerEntry;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 /**
  * Manages a local database for weather data.
  */
