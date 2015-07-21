@@ -1,31 +1,53 @@
 package com.toies.jpuyo.toiespassgenerator.app.data;
 
 import android.content.ContentValues;
+import android.content.Context;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class JsonPlayerParser extends JSONObject{
+public class JsonPlayerParser{
 
-	public JsonPlayerParser(String jsonString) throws JSONException {
-		super(jsonString);
+	private JSONObject jsonObject;
+
+	public JsonPlayerParser(Context ctx) throws JSONException {
+		String jsonString = generateJsonStringFromAssets(ctx);
+		jsonObject = new JSONObject(jsonString);
 	}
-	
+
+	private String generateJsonStringFromAssets(Context ctx) throws JSONException {
+		String jsonString;
+		try {
+			InputStream is = ctx.getAssets().open("players.json");
+			int size = is.available();
+			byte[] buffer = new byte[size];
+			is.read(buffer);
+			is.close();
+			jsonString = new String(buffer, "UTF-8");
+		} catch (IOException ex) {
+			ex.printStackTrace();
+			return null;
+		}
+		return jsonString;
+	}
+
 	public ContentValues[] getContentValues() throws JSONException {
 
 		List<ContentValues> valuesList = new ArrayList<>();
 
-		Iterator<?> keys = this.keys();
+		Iterator<?> keys = jsonObject.keys();
         while( keys.hasNext() ){
             String key = (String)keys.next();
-            if( this.get(key) instanceof JSONArray ){
-            	JSONArray rows = getJSONArray(key);
+            if( jsonObject.get(key) instanceof JSONArray ){
+            	JSONArray rows = jsonObject.getJSONArray(key);
             	for(int i = 0; i<rows.length(); i++){
 					JSONObject jsonObj = rows.getJSONObject(i);
 					ContentValues playerValues = new ContentValues();
