@@ -19,9 +19,6 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.test.AndroidTestCase;
 
-import com.toies.jpuyo.toiespassgenerator.app.data.table.Table;
-import com.toies.jpuyo.toiespassgenerator.app.data.table.TableFactory;
-
 import org.json.JSONException;
 
 public class TestJsonPlayerParser extends AndroidTestCase {
@@ -42,8 +39,8 @@ public class TestJsonPlayerParser extends AndroidTestCase {
 
         String jsonString =
                 "{ \"player\" :" +
-                        "[{\"number\":1,\"name\":\"Abelardo\"}," +
-                        " {\"number\":2,\"name\":\"Abellan\"}" +
+                        "[{\"player_id\":1,\"name\":\"Abelardo\"}," +
+                        " {\"player_id\":2,\"name\":\"Abellan\"}" +
                         "]" +
                         "}";
 
@@ -66,7 +63,7 @@ public class TestJsonPlayerParser extends AndroidTestCase {
                 null, // leaving "columns" null just returns all the columns.
                 null, // cols for "where" clause
                 null, // values for "where" clause
-                PlayerContract.PlayerEntry.NUMBER + " ASC"  // sort order == by DATE ASCENDING
+                PlayerContract.PlayerEntry.PLAYER_ID + " ASC"  // sort order == by DATE ASCENDING
         );
 
         // we should have as many records in the database as we've inserted

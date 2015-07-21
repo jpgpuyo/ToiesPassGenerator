@@ -55,7 +55,7 @@ public class PlayerContract {
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH_PLAYER;
 
         public static final String TABLE_NAME = "player";
-        public static final String NUMBER = "number";
+        public static final String PLAYER_ID = "player_id";
         public static final String NAME = "name";
 
         public static Uri buildPlayerUri(long id) {

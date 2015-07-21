@@ -16,7 +16,6 @@
 package com.toies.jpuyo.toiespassgenerator.app.data;
 
 import android.content.ComponentName;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.pm.PackageManager;
 import android.content.pm.ProviderInfo;
@@ -28,9 +27,6 @@ import android.test.AndroidTestCase;
 import com.toies.jpuyo.toiespassgenerator.app.data.PlayerContract.PlayerEntry;
 import com.toies.jpuyo.toiespassgenerator.app.data.table.Table;
 import com.toies.jpuyo.toiespassgenerator.app.data.table.TableFactory;
-import com.toies.jpuyo.toiespassgenerator.app.data.table.TablePlayer;
-
-import java.util.List;
 
 public class TestProvider extends AndroidTestCase {
 
@@ -195,7 +191,7 @@ public class TestProvider extends AndroidTestCase {
                 null, // leaving "columns" null just returns all the columns.
                 null, // cols for "where" clause
                 null, // values for "where" clause
-                PlayerEntry.NUMBER + " ASC"  // sort order == by DATE ASCENDING
+                PlayerEntry.PLAYER_ID + " ASC"  // sort order == by DATE ASCENDING
         );
 
         // we should have as many records in the database as we've inserted

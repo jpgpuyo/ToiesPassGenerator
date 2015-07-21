@@ -21,9 +21,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.toies.jpuyo.toiespassgenerator.app.data.PlayerContract.PlayerEntry;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 /**
  * Manages a local database for weather data.
  */
@@ -44,7 +41,7 @@ public class ToiesDbHelper extends SQLiteOpenHelper {
         // location setting, the city name, and the latitude and longitude
         final String SQL_CREATE_PLAYER_TABLE = "CREATE TABLE " + PlayerEntry.TABLE_NAME + " (" +
                 PlayerEntry._ID + " INTEGER PRIMARY KEY," +
-                PlayerEntry.NUMBER + " INTEGER NOT NULL, " +
+                PlayerEntry.PLAYER_ID + " INTEGER NOT NULL, " +
                 PlayerEntry.NAME + " TEXT NOT NULL " +
                 " );";
 

@@ -43,7 +43,7 @@ public class PlayerProvider extends ContentProvider {
     //player.number = ?
     private static final String sNumberSelection =
             PlayerContract.PlayerEntry.TABLE_NAME+
-                    "." + PlayerContract.PlayerEntry.NUMBER + " = ? ";
+                    "." + PlayerContract.PlayerEntry.PLAYER_ID + " = ? ";
 
     private Cursor getPlayerByNumber(Uri uri, String[] projection, String sortOrder) {
         String numberSelection = PlayerContract.PlayerEntry.getNumberFromUri(uri);

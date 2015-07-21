@@ -36,7 +36,7 @@ public class JsonPlayerParser extends JSONObject{
 						String columnName = (String)columns.next();
 						String columnValue = jsonObj.get(columnName).toString();
 
-						if (columnName.equals(PlayerContract.PlayerEntry.NUMBER)){
+						if (columnName.equals(PlayerContract.PlayerEntry.PLAYER_ID)){
 							playerValues.put(columnName, Integer.parseInt(columnValue));
 						}else{
 							playerValues.put(columnName, columnValue);
