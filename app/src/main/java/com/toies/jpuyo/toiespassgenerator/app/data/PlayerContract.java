@@ -61,5 +61,9 @@ public class PlayerContract {
         public static Uri buildPlayerUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);
         }
+
+        public static String getNumberFromUri(Uri uri) {
+            return uri.getPathSegments().get(1);
+        }
     }
 }

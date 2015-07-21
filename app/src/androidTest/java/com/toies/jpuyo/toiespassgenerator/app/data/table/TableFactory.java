@@ -11,20 +11,23 @@ public class TableFactory {
     private HashMap<String, Table> tables;
 
     public TableFactory(){
-        tables = new HashMap<String, Table>();
+        tables = new HashMap<>();
         tables.put(PlayerContract.PlayerEntry.TABLE_NAME, new TablePlayer());
     }
 
     public ArrayList<Table> getAllTables() {
 
-        ArrayList<Table> tableList = new ArrayList<Table>();
+        ArrayList<Table> tableList = new ArrayList<>();
 
-        Iterator<Table> it = tables.values().iterator();
-        while (it.hasNext()) {
-            Table table = (Table) it.next();
+        for (Table table : tables.values()) {
             tableList.add(table);
         }
 
         return tableList;
     }
+
+    public Table getPlayerTable() {
+        return tables.get(PlayerContract.PlayerEntry.TABLE_NAME);
+    }
+
 }
