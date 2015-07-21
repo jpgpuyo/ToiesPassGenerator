@@ -92,7 +92,7 @@ public class TestDb extends AndroidTestCase {
         ArrayList<Table> tableList = tableFactory.getAllTables();
 
         for (Table table : tableList) {
-            ContentValues tableValues = table.createValues();
+            ContentValues tableValues = table.createValuesForSingleInsert();
             long tableRowId = db.insert(table.getName(), null, tableValues);
             assertTrue(tableRowId != -1);
 

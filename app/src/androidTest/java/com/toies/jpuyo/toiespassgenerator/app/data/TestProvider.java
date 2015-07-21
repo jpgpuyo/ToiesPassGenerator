@@ -16,6 +16,7 @@
 package com.toies.jpuyo.toiespassgenerator.app.data;
 
 import android.content.ComponentName;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.pm.PackageManager;
 import android.content.pm.ProviderInfo;
@@ -27,6 +28,9 @@ import android.test.AndroidTestCase;
 import com.toies.jpuyo.toiespassgenerator.app.data.PlayerContract.PlayerEntry;
 import com.toies.jpuyo.toiespassgenerator.app.data.table.Table;
 import com.toies.jpuyo.toiespassgenerator.app.data.table.TableFactory;
+import com.toies.jpuyo.toiespassgenerator.app.data.table.TablePlayer;
+
+import java.util.List;
 
 public class TestProvider extends AndroidTestCase {
 
@@ -110,7 +114,7 @@ public class TestProvider extends AndroidTestCase {
 
         TableFactory tableFactory = new TableFactory();
         Table playerTable = tableFactory.getPlayerTable();
-        ContentValues playerValues = playerTable.createValues();
+        ContentValues playerValues = playerTable.createValuesForSingleInsert();
 
         long playerRowId = db.insert(PlayerEntry.TABLE_NAME, null, playerValues);
         assertTrue("Unable to Insert PlayerEntry into the Database", playerRowId != -1);
@@ -134,7 +138,7 @@ public class TestProvider extends AndroidTestCase {
 
         TableFactory tableFactory = new TableFactory();
         Table playerTable = tableFactory.getPlayerTable();
-        ContentValues playerValues = playerTable.createValues();
+        ContentValues playerValues = playerTable.createValuesForSingleInsert();
 
         TestUtilities.TestContentObserver tco = TestUtilities.getTestContentObserver();
         mContext.getContentResolver().registerContentObserver(PlayerEntry.CONTENT_URI, true, tco);
@@ -168,5 +172,41 @@ public class TestProvider extends AndroidTestCase {
 
         playerObserver.waitForNotificationOrFail();
         mContext.getContentResolver().unregisterContentObserver(playerObserver);
+    }
+
+    public void testBulkInsert() {
+        TableFactory tableFactory = new TableFactory();
+        Table playerTable = tableFactory.getPlayerTable();
+        ContentValues[] bulkInsertContentValues = playerTable.createValuesForBulkInsert();
+
+        TestUtilities.TestContentObserver weatherObserver = TestUtilities.getTestContentObserver();
+        mContext.getContentResolver().registerContentObserver(PlayerEntry.CONTENT_URI, true, weatherObserver);
+
+        int insertCount = mContext.getContentResolver().bulkInsert(PlayerEntry.CONTENT_URI, bulkInsertContentValues);
+
+        weatherObserver.waitForNotificationOrFail();
+        mContext.getContentResolver().unregisterContentObserver(weatherObserver);
+
+        assertEquals(insertCount, playerTable.getBulkInsertRecordsToInsert());
+
+        // A cursor is your primary interface to the query results.
+        Cursor cursor = mContext.getContentResolver().query(
+                PlayerEntry.CONTENT_URI,
+                null, // leaving "columns" null just returns all the columns.
+                null, // cols for "where" clause
+                null, // values for "where" clause
+                PlayerEntry.NUMBER + " ASC"  // sort order == by DATE ASCENDING
+        );
+
+        // we should have as many records in the database as we've inserted
+        assertEquals(cursor.getCount(), playerTable.getBulkInsertRecordsToInsert());
+
+        // and let's make sure they match the ones we created
+        cursor.moveToFirst();
+        for ( int i = 0; i < playerTable.getBulkInsertRecordsToInsert(); i++, cursor.moveToNext() ) {
+            TestUtilities.validateCurrentRecord("testBulkInsert.  Error validating WeatherEntry " + i,
+                    cursor, bulkInsertContentValues[i]);
+        }
+        cursor.close();
     }
 }

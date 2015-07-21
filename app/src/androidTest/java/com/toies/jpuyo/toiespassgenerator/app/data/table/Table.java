@@ -5,8 +5,10 @@ import android.content.ContentValues;
 import java.util.HashSet;
 
 public interface Table {
-    public String getName();
-    public HashSet<String> getColumnsSet();
-    public ContentValues createValues();
+    String getName();
+    HashSet<String> getColumnsSet();
+    ContentValues createValuesForSingleInsert();
+    ContentValues[] createValuesForBulkInsert();
+    int getBulkInsertRecordsToInsert();
 }
 
