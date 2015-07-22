@@ -33,37 +33,6 @@ public class PlayerProvider extends ContentProvider {
 
     static final int PLAYER = 100;
 
-    private static final SQLiteQueryBuilder sPlayerByNumber;
-
-    static{
-        sPlayerByNumber = new SQLiteQueryBuilder();
-        sPlayerByNumber.setTables(PlayerContract.PlayerEntry.TABLE_NAME);
-    }
-
-    //player.number = ?
-    private static final String sNumberSelection =
-            PlayerContract.PlayerEntry.TABLE_NAME+
-                    "." + PlayerContract.PlayerEntry.PLAYER_ID + " = ? ";
-
-    private Cursor getPlayerByNumber(Uri uri, String[] projection, String sortOrder) {
-        String numberSelection = PlayerContract.PlayerEntry.getNumberFromUri(uri);
-
-        String[] selectionArgs;
-        String selection;
-
-        selection = sNumberSelection;
-        selectionArgs = new String[]{numberSelection};
-
-        return sPlayerByNumber.query(mOpenHelper.getReadableDatabase(),
-                projection,
-                selection,
-                selectionArgs,
-                null,
-                null,
-                sortOrder
-        );
-    }
-
     static UriMatcher buildUriMatcher() {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = PlayerContract.CONTENT_AUTHORITY;
@@ -99,7 +68,6 @@ public class PlayerProvider extends ContentProvider {
         // and query the database accordingly.
         Cursor retCursor;
         switch (sUriMatcher.match(uri)) {
-            // "weather"
             case PLAYER: {
                 retCursor = mOpenHelper.getReadableDatabase().query(
                         PlayerContract.PlayerEntry.TABLE_NAME,
@@ -127,7 +95,6 @@ public class PlayerProvider extends ContentProvider {
 
         switch (match) {
             case PLAYER: {
-
                 long _id = db.insert(PlayerContract.PlayerEntry.TABLE_NAME, null, values);
                 if ( _id > 0 )
                     returnUri = PlayerContract.PlayerEntry.buildPlayerUri(_id);

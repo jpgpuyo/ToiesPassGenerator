@@ -37,15 +37,11 @@ public class ToiesDbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        // Create a table to hold locations.  A location consists of the string supplied in the
-        // location setting, the city name, and the latitude and longitude
         final String SQL_CREATE_PLAYER_TABLE = "CREATE TABLE " + PlayerEntry.TABLE_NAME + " (" +
                 PlayerEntry._ID + " INTEGER PRIMARY KEY," +
                 PlayerEntry.PLAYER_ID + " INTEGER NOT NULL, " +
                 PlayerEntry.NAME + " TEXT NOT NULL " +
                 " );";
-
-
         sqLiteDatabase.execSQL(SQL_CREATE_PLAYER_TABLE);
     }
 
