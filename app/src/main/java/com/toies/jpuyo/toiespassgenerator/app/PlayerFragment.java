@@ -25,16 +25,14 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.toies.jpuyo.toiespassgenerator.app.data.PlayerContract;
 
 public class PlayerFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
-    public static final String LOG_TAG = PlayerFragment.class.getSimpleName();
+
     private PlayerAdapter mPlayerAdapter;
 
-    ArrayAdapter<String> mForecastAdapter;
     private ListView mListView;
     private int mPosition = ListView.INVALID_POSITION;
 
@@ -79,24 +77,6 @@ public class PlayerFragment extends Fragment implements LoaderManager.LoaderCall
         mListView = (ListView) rootView.findViewById(R.id.listview_player);
         mPlayerAdapter = new PlayerAdapter(getActivity(), null, 0);
         mListView.setAdapter(mPlayerAdapter);
-        // We'll call our MainActivity
-        /*mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                // CursorAdapter returns a cursor at the correct position for getItem(), or null
-                // if it cannot seek to that position.
-                Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
-                if (cursor != null) {
-                    String locationSetting = Utility.getPreferredLocation(getActivity());
-                    ((Callback) getActivity())
-                            .onItemSelected(PlayerContract.PlayerEntry.buildWeatherLocationWithDate(
-                                    locationSetting, cursor.getLong(COL_WEATHER_DATE)
-                            ));
-                }
-                mPosition = position;
-            }*
-        });*/
 
         if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
             mPosition = savedInstanceState.getInt(SELECTED_KEY);
@@ -110,10 +90,6 @@ public class PlayerFragment extends Fragment implements LoaderManager.LoaderCall
         getLoaderManager().initLoader(PLAYER_LOADER, null, this);
         super.onActivityCreated(savedInstanceState);
     }
-
-    /*private void updateWeather() {
-        //SunshineSyncAdapter.syncImmediately(getActivity());
-    }*/
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
