@@ -57,6 +57,7 @@ public class PlayerContract {
         public static final String TABLE_NAME = "player";
         public static final String PLAYER_ID = "player_id";
         public static final String NAME = "name";
+        public static final String USED = "used";
 
         public static Uri buildPlayerUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);

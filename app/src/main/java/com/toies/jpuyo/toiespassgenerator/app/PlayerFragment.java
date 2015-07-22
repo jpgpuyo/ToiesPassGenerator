@@ -43,12 +43,14 @@ public class PlayerFragment extends Fragment implements LoaderManager.LoaderCall
     private static final String[] PLAYER_COLUMNS = {
             PlayerContract.PlayerEntry.TABLE_NAME + "." + PlayerContract.PlayerEntry._ID,
             PlayerContract.PlayerEntry.PLAYER_ID,
-            PlayerContract.PlayerEntry.NAME
+            PlayerContract.PlayerEntry.NAME,
+            PlayerContract.PlayerEntry.USED
     };
 
     static final int COL_ID = 0;
     static final int COL_PLAYER_ID = 1;
     static final int COL_NAME = 2;
+    static final int COL_USED = 3;
 
     /**
      * A callback interface that all activities containing this fragment must

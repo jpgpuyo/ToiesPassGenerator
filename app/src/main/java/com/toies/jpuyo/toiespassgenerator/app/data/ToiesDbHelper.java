@@ -40,7 +40,8 @@ public class ToiesDbHelper extends SQLiteOpenHelper {
         final String SQL_CREATE_PLAYER_TABLE = "CREATE TABLE " + PlayerEntry.TABLE_NAME + " (" +
                 PlayerEntry._ID + " INTEGER PRIMARY KEY," +
                 PlayerEntry.PLAYER_ID + " INTEGER NOT NULL, " +
-                PlayerEntry.NAME + " TEXT NOT NULL " +
+                PlayerEntry.NAME + " TEXT NOT NULL, " +
+                PlayerEntry.USED + " BOOLEAN NOT NULL DEFAULT 0 " +
                 " );";
         sqLiteDatabase.execSQL(SQL_CREATE_PLAYER_TABLE);
     }
