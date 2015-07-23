@@ -25,14 +25,4 @@ public class PlayerLoader {
                 null,
                 PlayerContract.PlayerEntry.NAME + " ASC");
     }
-
-    public Loader<Cursor> getAll(Context context){
-
-        return new CursorLoader(context,
-                PlayerContract.PlayerEntry.CONTENT_URI,
-                PLAYER_COLUMNS,
-                null,
-                null,
-                PlayerContract.PlayerEntry.NAME + " ASC");
-    }
 }
