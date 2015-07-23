@@ -20,14 +20,13 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import com.toies.jpuyo.toiespassgenerator.app.data.PlayerContract;
+import com.toies.jpuyo.toiespassgenerator.app.data.PlayerLoader;
 
 public class PlayerFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -37,21 +36,7 @@ public class PlayerFragment extends Fragment implements LoaderManager.LoaderCall
     private int mPosition = ListView.INVALID_POSITION;
 
     private static final String SELECTED_KEY = "selected_position";
-
     private static final int PLAYER_LOADER = 0;
-
-    private static final String[] PLAYER_COLUMNS = {
-            PlayerContract.PlayerEntry.TABLE_NAME + "." + PlayerContract.PlayerEntry._ID,
-            PlayerContract.PlayerEntry.PLAYER_ID,
-            PlayerContract.PlayerEntry.NAME,
-            PlayerContract.PlayerEntry.USED
-    };
-
-    static final int COL_ID = 0;
-    static final int COL_PLAYER_ID = 1;
-    static final int COL_NAME = 2;
-    static final int COL_USED = 3;
-
     /**
      * A callback interface that all activities containing this fragment must
      * implement. This mechanism allows activities to be notified of item
@@ -103,12 +88,7 @@ public class PlayerFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        return new CursorLoader(getActivity(),
-                PlayerContract.PlayerEntry.CONTENT_URI,
-                PLAYER_COLUMNS,
-                null,
-                null,
-                PlayerContract.PlayerEntry.NAME + " ASC");
+        return new PlayerLoader().getAllPlayersSortedByName(getActivity());
     }
 
     @Override

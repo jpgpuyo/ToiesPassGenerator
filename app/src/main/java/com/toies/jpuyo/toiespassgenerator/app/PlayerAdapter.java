@@ -43,9 +43,9 @@ public class PlayerAdapter extends CursorAdapter {
 
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
-        String name = cursor.getString(PlayerFragment.COL_NAME);
-        long playerRowId = cursor.getInt(PlayerFragment.COL_ID);
-        int passwordUsed = cursor.getInt(PlayerFragment.COL_USED);
+        String name = cursor.getString(cursor.getColumnIndex(PlayerContract.PlayerEntry.NAME));
+        long playerRowId = cursor.getInt(cursor.getColumnIndex(PlayerContract.PlayerEntry._ID));
+        int passwordUsed = cursor.getInt(cursor.getColumnIndex(PlayerContract.PlayerEntry.USED));
 
         if (passwordUsed == 1){
             viewHolder.iconPasswordUsed.setImageResource(R.drawable.ic_clear);
