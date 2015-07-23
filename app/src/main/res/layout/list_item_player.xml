@@ -45,7 +45,7 @@
         android:orientation="vertical">
 
         <Button
-            android:id="@+id/lis_item_player_btn_get_password"
+            android:id="@+id/list_item_player_btn_get_password"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/btn_get_password"
