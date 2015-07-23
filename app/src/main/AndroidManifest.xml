@@ -18,7 +18,7 @@
         </activity>
         <provider
             android:authorities="@string/content_authority"
-            android:name=".data.PlayerProvider"
+            android:name=".data.ToiesProvider"
             android:exported="false"
             android:syncable="true" />
     </application>

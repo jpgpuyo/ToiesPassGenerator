@@ -64,21 +64,21 @@ public class TestProvider extends AndroidTestCase {
         PackageManager pm = mContext.getPackageManager();
 
         // We define the component name based on the package name from the context and the
-        // PlayerProvider class.
+        // ToiesProvider class.
         ComponentName componentName = new ComponentName(mContext.getPackageName(),
-                PlayerProvider.class.getName());
+                ToiesProvider.class.getName());
         try {
             // Fetch the provider info using the component name from the PackageManager
             // This throws an exception if the provider isn't registered.
             ProviderInfo providerInfo = pm.getProviderInfo(componentName, 0);
 
             // Make sure that the registered authority matches the authority from the Contract.
-            assertEquals("Error: PlayerProvider registered with authority: " + providerInfo.authority +
+            assertEquals("Error: ToiesProvider registered with authority: " + providerInfo.authority +
                     " instead of authority: " + PlayerContract.CONTENT_AUTHORITY,
                     providerInfo.authority, PlayerContract.CONTENT_AUTHORITY);
         } catch (PackageManager.NameNotFoundException e) {
             // I guess the provider isn't registered correctly.
-            assertTrue("Error: PlayerProvider not registered at " + mContext.getPackageName(),
+            assertTrue("Error: ToiesProvider not registered at " + mContext.getPackageName(),
                     false);
         }
     }
