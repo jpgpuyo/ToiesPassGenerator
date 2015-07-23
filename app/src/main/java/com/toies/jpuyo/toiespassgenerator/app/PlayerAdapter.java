@@ -45,7 +45,7 @@ public class PlayerAdapter extends CursorAdapter {
 
         String name = cursor.getString(cursor.getColumnIndex(PlayerContract.PlayerEntry.NAME));
         long playerRowId = cursor.getInt(cursor.getColumnIndex(PlayerContract.PlayerEntry._ID));
-        int passwordUsed = cursor.getInt(cursor.getColumnIndex(PlayerContract.PlayerEntry.USED));
+        int passwordUsed = cursor.getInt(cursor.getColumnIndex(PlayerContract.PlayerEntry.PASSWORD_USED));
 
         if (passwordUsed == 1){
             viewHolder.iconPasswordUsed.setImageResource(R.drawable.ic_clear);
@@ -62,7 +62,7 @@ public class PlayerAdapter extends CursorAdapter {
                 long playerRowId = (long)v.getTag();
 
                 ContentValues updatedValues = new ContentValues();
-                updatedValues.put(PlayerContract.PlayerEntry.USED, 1);
+                updatedValues.put(PlayerContract.PlayerEntry.PASSWORD_USED, 1);
 
                 mContext.getContentResolver().update(
                         PlayerContract.PlayerEntry.CONTENT_URI, updatedValues, PlayerContract.PlayerEntry._ID + "= ?",

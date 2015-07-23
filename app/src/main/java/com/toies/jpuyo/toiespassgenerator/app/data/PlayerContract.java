@@ -19,7 +19,6 @@ import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.net.Uri;
 import android.provider.BaseColumns;
-import android.text.format.Time;
 
 /**
  * Defines table and column names for the weather database.
@@ -57,7 +56,7 @@ public class PlayerContract {
         public static final String TABLE_NAME = "player";
         public static final String PLAYER_ID = "player_id";
         public static final String NAME = "name";
-        public static final String USED = "used";
+        public static final String PASSWORD_USED = "password_used";
 
         public static Uri buildPlayerUri(long id) {
             return ContentUris.withAppendedId(CONTENT_URI, id);

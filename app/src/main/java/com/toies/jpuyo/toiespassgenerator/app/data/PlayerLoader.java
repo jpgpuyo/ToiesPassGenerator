@@ -11,7 +11,7 @@ public class PlayerLoader {
             PlayerContract.PlayerEntry.TABLE_NAME + "." + PlayerContract.PlayerEntry._ID,
             PlayerContract.PlayerEntry.PLAYER_ID,
             PlayerContract.PlayerEntry.NAME,
-            PlayerContract.PlayerEntry.USED
+            PlayerContract.PlayerEntry.PASSWORD_USED
     };
 
     public PlayerLoader(){}
