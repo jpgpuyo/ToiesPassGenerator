@@ -6,16 +6,19 @@ import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 public class PlayerAdapter extends CursorAdapter {
 
     public static class ViewHolder {
 
-        public final TextView descriptionView;
+        public final ImageView iconPasswordUsed;
+        public final TextView playerName;
 
         public ViewHolder(View view) {
-            descriptionView = (TextView) view.findViewById(R.id.list_item_player_name);
+            iconPasswordUsed = (ImageView) view.findViewById(R.id.list_item_player_icon_used);
+            playerName = (TextView) view.findViewById(R.id.list_item_player_name);
         }
     }
 
@@ -37,6 +40,8 @@ public class PlayerAdapter extends CursorAdapter {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
         String name = cursor.getString(PlayerFragment.COL_NAME);
-        viewHolder.descriptionView.setText(name);
+        viewHolder.iconPasswordUsed.setImageResource(R.drawable.ic_fog);
+        viewHolder.playerName.setText(name);
+
     }
 }
