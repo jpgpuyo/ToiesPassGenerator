@@ -1,8 +1,5 @@
 <resources>
-    <string name="app_name">ToiesPassGenerator</string>
-    <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="app_name">Toies Pass Generator</string>
     <string name="content_authority">com.toies.jpuyo.toiespassgenerator.app</string>
-    <string name="action_map">Map Location</string>
     <string name="btn_get_password">Get Password!</string>
 </resources>
