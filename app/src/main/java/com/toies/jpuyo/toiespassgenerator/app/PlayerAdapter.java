@@ -1,13 +1,8 @@
 package com.toies.jpuyo.toiespassgenerator.app;
 
-import android.app.NotificationManager;
 import android.content.ContentValues;
 import android.content.Context;
-import android.content.res.Resources;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,8 +14,6 @@ import android.widget.TextView;
 import com.toies.jpuyo.toiespassgenerator.app.data.PlayerContract;
 
 public class PlayerAdapter extends CursorAdapter {
-
-    private static final int PASSWORD_NOTIFICATION_ID = 3004;
 
     public static class ViewHolder {
 
@@ -78,32 +71,27 @@ public class PlayerAdapter extends CursorAdapter {
 
         @Override
         public void onClick(View v) {
+            markPlayerAsUsed();
+            String password = generatePassword();
+            sendPasswordNotification(password);
+        }
 
+        private void markPlayerAsUsed() {
             ContentValues updatedValues = new ContentValues();
             updatedValues.put(PlayerContract.PlayerEntry.PASSWORD_USED, 1);
 
             mContext.getContentResolver().update(
                     PlayerContract.PlayerEntry.CONTENT_URI, updatedValues, PlayerContract.PlayerEntry._ID + "= ?",
-                    new String[] { Long.toString(playerRowId)});
+                    new String[]{Long.toString(playerRowId)});
+        }
 
-            int iconId = R.drawable.ic_clear;
-            Resources resources = mContext.getResources();
-            Bitmap largeIcon = BitmapFactory.decodeResource(resources, iconId);
-            String title = mContext.getString(R.string.app_name);
-
+        private String generatePassword() {
             PlayerPassword playerPassword = new PlayerPassword(playerName);
-            String password = playerPassword.generatePassword();
+            return playerPassword.generatePassword();
+        }
 
-            NotificationCompat.Builder mBuilder =
-                    new NotificationCompat.Builder(mContext)
-                            .setColor(mContext.getResources().getColor(R.color.sunshine_light_blue))
-                            .setSmallIcon(iconId)
-                            .setContentTitle(title)
-                            .setContentText(password);
-
-            NotificationManager mNotificationManager =
-                    (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-            mNotificationManager.notify(PASSWORD_NOTIFICATION_ID, mBuilder.build());
+        private void sendPasswordNotification(String password) {
+            new PasswordNotification(mContext, password).send();
         }
     }
 }
