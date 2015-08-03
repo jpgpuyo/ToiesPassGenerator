@@ -98,7 +98,6 @@ public class PlayerAdapter extends CursorAdapter {
                     new NotificationCompat.Builder(mContext)
                             .setColor(mContext.getResources().getColor(R.color.sunshine_light_blue))
                             .setSmallIcon(iconId)
-                            .setLargeIcon(largeIcon)
                             .setContentTitle(title)
                             .setContentText(password);
 
