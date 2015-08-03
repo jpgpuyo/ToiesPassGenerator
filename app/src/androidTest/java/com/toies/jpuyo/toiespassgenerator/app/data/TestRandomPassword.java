@@ -17,6 +17,8 @@ package com.toies.jpuyo.toiespassgenerator.app.data;
 
 import android.test.AndroidTestCase;
 
+import com.toies.jpuyo.toiespassgenerator.app.PlayerPassword;
+
 import java.text.Normalizer;
 import java.util.Random;
 
@@ -67,13 +69,11 @@ public class TestRandomPassword extends AndroidTestCase {
     public void testGetPassword() {
 
         String playerName = "Alexis Sánchez";
-        playerName = getLastWord(playerName);
-        playerName = removeAccents(playerName);
-        int randomInt = 4527;
-        String password = playerName + String.valueOf(randomInt);
+        PlayerPassword playerPassword = new PlayerPassword("Alexis Sánchez");
+        String password = playerPassword.generatePassword();
 
         assertTrue("Error: Test failed to get Password for Alexis Sanchez",
-                password.equals("Sanchez4527"));
+                password.equals("Sanchez"+playerPassword.getRandomNumber()));
     }
 
     private String getLastWord(String playerName){

@@ -50,7 +50,7 @@ public class PlayerAdapter extends CursorAdapter {
 
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
-        String name = cursor.getString(cursor.getColumnIndex(PlayerContract.PlayerEntry.NAME));
+        String playerName = cursor.getString(cursor.getColumnIndex(PlayerContract.PlayerEntry.NAME));
         long playerRowId = cursor.getInt(cursor.getColumnIndex(PlayerContract.PlayerEntry._ID));
         int passwordUsed = cursor.getInt(cursor.getColumnIndex(PlayerContract.PlayerEntry.PASSWORD_USED));
 
@@ -59,40 +59,52 @@ public class PlayerAdapter extends CursorAdapter {
         }else{
             viewHolder.iconPasswordUsed.setImageResource(R.drawable.ic_light_rain);
         }
-        viewHolder.playerName.setText(name);
+        viewHolder.playerName.setText(playerName);
 
         Button getPasswordButton = (Button) view.findViewById(R.id.list_item_player_btn_get_password);
-        getPasswordButton.setTag(playerRowId);
-        getPasswordButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(final View v) {
-                long playerRowId = (long)v.getTag();
+        getPasswordButton.setOnClickListener(new GetPasswordOnClickListener(playerRowId,playerName));
+    }
 
-                ContentValues updatedValues = new ContentValues();
-                updatedValues.put(PlayerContract.PlayerEntry.PASSWORD_USED, 1);
+    private class GetPasswordOnClickListener implements View.OnClickListener {
 
-                mContext.getContentResolver().update(
-                        PlayerContract.PlayerEntry.CONTENT_URI, updatedValues, PlayerContract.PlayerEntry._ID + "= ?",
-                        new String[] { Long.toString(playerRowId)});
+        long playerRowId;
+        String playerName;
 
-                int iconId = R.drawable.ic_clear;
-                Resources resources = mContext.getResources();
-                Bitmap largeIcon = BitmapFactory.decodeResource(resources, iconId);
-                String title = mContext.getString(R.string.app_name);
+        public GetPasswordOnClickListener(long playerRowId, String playerName)
+        {
+            this.playerRowId = playerRowId;
+            this.playerName = playerName;
+        }
 
-                NotificationCompat.Builder mBuilder =
-                        new NotificationCompat.Builder(mContext)
-                                .setColor(mContext.getResources().getColor(R.color.sunshine_light_blue))
-                                .setSmallIcon(iconId)
-                                .setLargeIcon(largeIcon)
-                                .setContentTitle(title)
-                                .setContentText("TEST");
+        @Override
+        public void onClick(View v) {
 
-                NotificationManager mNotificationManager =
-                        (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
-                mNotificationManager.notify(PASSWORD_NOTIFICATION_ID, mBuilder.build());
-            }
-        });
+            ContentValues updatedValues = new ContentValues();
+            updatedValues.put(PlayerContract.PlayerEntry.PASSWORD_USED, 1);
 
+            mContext.getContentResolver().update(
+                    PlayerContract.PlayerEntry.CONTENT_URI, updatedValues, PlayerContract.PlayerEntry._ID + "= ?",
+                    new String[] { Long.toString(playerRowId)});
+
+            int iconId = R.drawable.ic_clear;
+            Resources resources = mContext.getResources();
+            Bitmap largeIcon = BitmapFactory.decodeResource(resources, iconId);
+            String title = mContext.getString(R.string.app_name);
+
+            PlayerPassword playerPassword = new PlayerPassword(playerName);
+            String password = playerPassword.generatePassword();
+
+            NotificationCompat.Builder mBuilder =
+                    new NotificationCompat.Builder(mContext)
+                            .setColor(mContext.getResources().getColor(R.color.sunshine_light_blue))
+                            .setSmallIcon(iconId)
+                            .setLargeIcon(largeIcon)
+                            .setContentTitle(title)
+                            .setContentText(password);
+
+            NotificationManager mNotificationManager =
+                    (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
+            mNotificationManager.notify(PASSWORD_NOTIFICATION_ID, mBuilder.build());
+        }
     }
 }
