@@ -28,8 +28,7 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:minHeight="?android:attr/listPreferredItemHeight"
-        android:orientation="horizontal"
-        android:background="@drawable/touch_selector">
+        android:orientation="horizontal">
 
         <FrameLayout
             android:layout_width="60dp"

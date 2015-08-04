@@ -2,7 +2,6 @@ package com.toies.jpuyo.toiespassgenerator.app;
 
 import android.content.ContentValues;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -13,7 +12,7 @@ import com.toies.jpuyo.toiespassgenerator.app.data.PlayerContract;
 import org.json.JSONException;
 
 
-public class MainActivity extends ActionBarActivity implements PlayerFragment.Callback {
+public class MainActivity extends ActionBarActivity{
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,10 +61,5 @@ public class MainActivity extends ActionBarActivity implements PlayerFragment.Ca
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("database_populated",true);
         editor.apply();
-    }
-
-    @Override
-    public void onItemSelected(Uri dateUri) {
-
     }
 }

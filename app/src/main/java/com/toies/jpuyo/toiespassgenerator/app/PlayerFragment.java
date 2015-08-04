@@ -37,17 +37,6 @@ public class PlayerFragment extends Fragment implements LoaderManager.LoaderCall
 
     private static final String SELECTED_KEY = "selected_position";
     private static final int PLAYER_LOADER = 0;
-    /**
-     * A callback interface that all activities containing this fragment must
-     * implement. This mechanism allows activities to be notified of item
-     * selections.
-     */
-    public interface Callback {
-        /**
-         * DetailFragmentCallback for when an item has been selected.
-         */
-        void onItemSelected(Uri dateUri);
-    }
 
     public PlayerFragment() {}
 
