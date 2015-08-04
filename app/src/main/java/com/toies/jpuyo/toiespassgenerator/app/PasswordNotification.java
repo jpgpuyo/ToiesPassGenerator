@@ -17,7 +17,7 @@ public class PasswordNotification {
     }
 
     public void send(){
-        int iconId = R.drawable.ic_clear;
+        int iconId = R.drawable.ic_circle_green;
         String title = context.getString(R.string.app_name);
 
         NotificationCompat.Builder mBuilder =

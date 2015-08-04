@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     tools:context="com.toies.jpuyo.toiespassgenerator.app.PlayerFragment">
     <ListView
-        style="@style/ForecastListStyle"
+        style="@style/PlayerListStyle"
         android:id="@+id/listview_player"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

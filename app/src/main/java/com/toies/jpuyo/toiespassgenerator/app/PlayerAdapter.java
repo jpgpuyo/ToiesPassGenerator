@@ -48,9 +48,9 @@ public class PlayerAdapter extends CursorAdapter {
         int passwordUsed = cursor.getInt(cursor.getColumnIndex(PlayerContract.PlayerEntry.PASSWORD_USED));
 
         if (passwordUsed == 1){
-            viewHolder.iconPasswordUsed.setImageResource(R.drawable.ic_clear);
+            viewHolder.iconPasswordUsed.setImageResource(R.drawable.ic_circle_green);
         }else{
-            viewHolder.iconPasswordUsed.setImageResource(R.drawable.ic_light_rain);
+            viewHolder.iconPasswordUsed.setImageResource(R.drawable.ic_circle_red);
         }
         viewHolder.playerName.setText(playerName);
 
