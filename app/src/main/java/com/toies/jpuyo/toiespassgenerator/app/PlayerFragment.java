@@ -25,10 +25,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.SearchView;
 
 import com.toies.jpuyo.toiespassgenerator.app.data.PlayerLoader;
 
-public class PlayerFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class PlayerFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SearchView.OnQueryTextListener{
 
     private PlayerAdapter mPlayerAdapter;
 
@@ -91,5 +92,15 @@ public class PlayerFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mPlayerAdapter.swapCursor(null);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
     }
 }
