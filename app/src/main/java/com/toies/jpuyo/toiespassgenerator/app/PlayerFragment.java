@@ -21,6 +21,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,9 @@ public class PlayerFragment extends Fragment implements LoaderManager.LoaderCall
     private PlayerAdapter mPlayerAdapter;
 
     private ListView mListView;
+    private SearchView mSearchView;
+    private String mCurFilter;
+
     private int mPosition = ListView.INVALID_POSITION;
 
     private static final String SELECTED_KEY = "selected_position";
@@ -54,6 +58,9 @@ public class PlayerFragment extends Fragment implements LoaderManager.LoaderCall
         mListView = (ListView) rootView.findViewById(R.id.listview_player);
         mPlayerAdapter = new PlayerAdapter(getActivity(), null, 0);
         mListView.setAdapter(mPlayerAdapter);
+
+        mSearchView = (SearchView) rootView.findViewById(R.id.searchview_player);
+        mSearchView.setOnQueryTextListener(this);
 
         if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
             mPosition = savedInstanceState.getInt(SELECTED_KEY);
@@ -78,6 +85,9 @@ public class PlayerFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        if (mCurFilter != null) {
+            return new PlayerLoader().getAllPlayersSortedAndFilteredByName(getActivity(), mCurFilter);
+        }
         return new PlayerLoader().getAllPlayersSortedByName(getActivity());
     }
 
@@ -101,6 +111,15 @@ public class PlayerFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        return false;
+        String newFilter = !TextUtils.isEmpty(newText) ? newText : null;
+        if (mCurFilter == null && newFilter == null) {
+            return true;
+        }
+        if (mCurFilter != null && mCurFilter.equals(newFilter)) {
+            return true;
+        }
+        mCurFilter = newFilter;
+        getLoaderManager().restartLoader(0, null, this);
+        return true;
     }
 }

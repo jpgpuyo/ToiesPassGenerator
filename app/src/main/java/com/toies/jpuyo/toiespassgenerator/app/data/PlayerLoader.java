@@ -25,4 +25,14 @@ public class PlayerLoader {
                 null,
                 PlayerContract.PlayerEntry.NAME + " ASC");
     }
+
+    public Loader<Cursor> getAllPlayersSortedAndFilteredByName(Context context, String playerName){
+
+        return new CursorLoader(context,
+                PlayerContract.PlayerEntry.CONTENT_URI,
+                PLAYER_COLUMNS,
+                PlayerContract.PlayerEntry.NAME + " LIKE '%" + playerName +"%'",
+                null,
+                PlayerContract.PlayerEntry.NAME + " ASC");
+    }
 }
