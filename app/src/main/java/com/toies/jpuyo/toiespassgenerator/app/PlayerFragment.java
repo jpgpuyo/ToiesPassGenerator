@@ -21,13 +21,19 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.ShareActionProvider;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SearchView;
 
+import com.toies.jpuyo.toiespassgenerator.app.data.PlayerContract;
 import com.toies.jpuyo.toiespassgenerator.app.data.PlayerLoader;
 
 public class PlayerFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, SearchView.OnQueryTextListener{
@@ -37,6 +43,7 @@ public class PlayerFragment extends Fragment implements LoaderManager.LoaderCall
     private ListView mListView;
     private SearchView mSearchView;
     private String mCurFilter;
+    private boolean action_random_player_selected;
 
     private int mPosition = ListView.INVALID_POSITION;
 
@@ -48,6 +55,7 @@ public class PlayerFragment extends Fragment implements LoaderManager.LoaderCall
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -60,6 +68,8 @@ public class PlayerFragment extends Fragment implements LoaderManager.LoaderCall
         mListView.setAdapter(mPlayerAdapter);
 
         mSearchView = (SearchView) rootView.findViewById(R.id.searchview_player);
+        mSearchView.setFocusable(true);
+        mSearchView.setIconifiedByDefault(false);
         mSearchView.setOnQueryTextListener(this);
 
         if (savedInstanceState != null && savedInstanceState.containsKey(SELECTED_KEY)) {
@@ -67,6 +77,26 @@ public class PlayerFragment extends Fragment implements LoaderManager.LoaderCall
         }
 
         return rootView;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        inflater.inflate(R.menu.playerfragment, menu);
+
+        // Retrieve the share menu item
+        MenuItem menuItem = menu.findItem(R.id.action_random_player);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_random_player) {
+            action_random_player_selected = true;
+            getLoaderManager().restartLoader(0, null, this);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -85,6 +115,9 @@ public class PlayerFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        if (action_random_player_selected){
+            return new PlayerLoader().getARandomPlayer(getActivity());
+        }
         if (mCurFilter != null) {
             return new PlayerLoader().getAllPlayersSortedAndFilteredByName(getActivity(), mCurFilter);
         }
@@ -93,9 +126,17 @@ public class PlayerFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mPlayerAdapter.swapCursor(data);
-        if (mPosition != ListView.INVALID_POSITION) {
-            mListView.smoothScrollToPosition(mPosition);
+        if (action_random_player_selected){
+            action_random_player_selected = false;
+            data.moveToFirst();
+            String playerName = data.getString(data.getColumnIndex(PlayerContract.PlayerEntry.NAME));
+            mSearchView.setQuery(playerName,false);
+            mSearchView.clearFocus();
+        }else {
+            mPlayerAdapter.swapCursor(data);
+            if (mPosition != ListView.INVALID_POSITION) {
+                mListView.smoothScrollToPosition(mPosition);
+            }
         }
     }
 

@@ -17,7 +17,6 @@ public class PlayerLoader {
     public PlayerLoader(){}
 
     public Loader<Cursor> getAllPlayersSortedByName(Context context){
-
         return new CursorLoader(context,
                 PlayerContract.PlayerEntry.CONTENT_URI,
                 PLAYER_COLUMNS,
@@ -27,12 +26,20 @@ public class PlayerLoader {
     }
 
     public Loader<Cursor> getAllPlayersSortedAndFilteredByName(Context context, String playerName){
-
         return new CursorLoader(context,
                 PlayerContract.PlayerEntry.CONTENT_URI,
                 PLAYER_COLUMNS,
                 PlayerContract.PlayerEntry.NAME + " LIKE '%" + playerName +"%'",
                 null,
                 PlayerContract.PlayerEntry.NAME + " ASC");
+    }
+
+    public Loader<Cursor> getARandomPlayer(Context context) {
+        return new CursorLoader(context,
+                PlayerContract.PlayerEntry.CONTENT_URI,
+                PLAYER_COLUMNS,
+                null,
+                null,
+                "RANDOM() LIMIT 1");
     }
 }

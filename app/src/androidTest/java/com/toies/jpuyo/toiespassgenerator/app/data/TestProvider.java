@@ -205,4 +205,17 @@ public class TestProvider extends AndroidTestCase {
         }
         cursor.close();
     }
+
+    public void testGetRandomRecord(){
+        testBulkInsert();
+        Cursor cursor = mContext.getContentResolver().query(
+                PlayerEntry.CONTENT_URI,
+                null,
+                null,
+                null,
+                "RANDOM() LIMIT 1"
+        );
+        int numberOfRows = cursor.getCount();
+        assertTrue(numberOfRows == 1);
+    }
 }
