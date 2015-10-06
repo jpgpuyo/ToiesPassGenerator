@@ -15,9 +15,14 @@
  */
 package com.toies.jpuyo.toiespassgenerator.app;
 
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.res.Resources;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
@@ -30,8 +35,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import com.toies.jpuyo.toiespassgenerator.app.data.PlayerContract;
 import com.toies.jpuyo.toiespassgenerator.app.data.PlayerLoader;
@@ -65,7 +72,26 @@ public class PlayerFragment extends Fragment implements LoaderManager.LoaderCall
         View rootView = inflater.inflate(R.layout.player_fragment, container, false);
         mListView = (ListView) rootView.findViewById(R.id.listview_player);
         mPlayerAdapter = new PlayerAdapter(getActivity(), null, 0);
+
         mListView.setAdapter(mPlayerAdapter);
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view,
+                                    int position, long id) {
+                String playerName = mPlayerAdapter.getPlayerName(position);
+                long playerRowId =  mPlayerAdapter.getPlayerRowId(position);
+
+                Resources resources = getActivity().getResources();
+                Snackbar snackbar = Snackbar.make(view, playerName, Snackbar.LENGTH_LONG)
+                                    .setAction(resources.getString(R.string.btn_get_password), new GetPasswordOnClickListener(playerRowId, playerName))
+                                    .setActionTextColor(Color.RED);
+
+                View snackbarView = snackbar.getView();
+                snackbarView.setBackgroundColor(Color.BLACK);
+                TextView textView = (TextView)snackbarView.findViewById(android.support.design.R.id.snackbar_text);
+                textView.setTextColor(Color.WHITE);
+                snackbar.show();
+            }
+        });
 
         mSearchView = (SearchView) rootView.findViewById(R.id.searchview_player);
         mSearchView.setFocusable(true);
@@ -162,5 +188,42 @@ public class PlayerFragment extends Fragment implements LoaderManager.LoaderCall
         mCurFilter = newFilter;
         getLoaderManager().restartLoader(0, null, this);
         return true;
+    }
+
+    private class GetPasswordOnClickListener implements View.OnClickListener {
+
+        long playerRowId;
+        String playerName;
+
+        public GetPasswordOnClickListener(long playerRowId, String playerName)
+        {
+            this.playerRowId = playerRowId;
+            this.playerName = playerName;
+        }
+
+        @Override
+        public void onClick(View v) {
+            markPlayerAsUsed();
+            String password = generatePassword();
+            sendPasswordNotification(password);
+        }
+
+        private void markPlayerAsUsed() {
+            ContentValues updatedValues = new ContentValues();
+            updatedValues.put(PlayerContract.PlayerEntry.PASSWORD_USED, 1);
+
+            getActivity().getContentResolver().update(
+                    PlayerContract.PlayerEntry.CONTENT_URI, updatedValues, PlayerContract.PlayerEntry._ID + "= ?",
+                    new String[]{Long.toString(playerRowId)});
+        }
+
+        private String generatePassword() {
+            PlayerPassword playerPassword = new PlayerPassword(playerName);
+            return playerPassword.generatePassword();
+        }
+
+        private void sendPasswordNotification(String password) {
+            new PasswordNotification(getActivity(), password).send();
+        }
     }
 }

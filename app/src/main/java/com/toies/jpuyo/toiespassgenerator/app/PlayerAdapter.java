@@ -7,7 +7,6 @@ import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -44,7 +43,6 @@ public class PlayerAdapter extends CursorAdapter {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
 
         String playerName = cursor.getString(cursor.getColumnIndex(PlayerContract.PlayerEntry.NAME));
-        long playerRowId = cursor.getInt(cursor.getColumnIndex(PlayerContract.PlayerEntry._ID));
         int passwordUsed = cursor.getInt(cursor.getColumnIndex(PlayerContract.PlayerEntry.PASSWORD_USED));
 
         if (passwordUsed == 1){
@@ -53,45 +51,18 @@ public class PlayerAdapter extends CursorAdapter {
             viewHolder.iconPasswordUsed.setImageResource(R.drawable.ic_circle_red);
         }
         viewHolder.playerName.setText(playerName);
-
-        Button getPasswordButton = (Button) view.findViewById(R.id.list_item_player_btn_get_password);
-        getPasswordButton.setOnClickListener(new GetPasswordOnClickListener(playerRowId,playerName));
     }
 
-    private class GetPasswordOnClickListener implements View.OnClickListener {
 
-        long playerRowId;
-        String playerName;
+    public String getPlayerName(int position) {
+        Cursor cursor = (Cursor)getItem(position);
+        String playerName = cursor.getString(cursor.getColumnIndex(PlayerContract.PlayerEntry.NAME));
+        return playerName;
+    }
 
-        public GetPasswordOnClickListener(long playerRowId, String playerName)
-        {
-            this.playerRowId = playerRowId;
-            this.playerName = playerName;
-        }
-
-        @Override
-        public void onClick(View v) {
-            markPlayerAsUsed();
-            String password = generatePassword();
-            sendPasswordNotification(password);
-        }
-
-        private void markPlayerAsUsed() {
-            ContentValues updatedValues = new ContentValues();
-            updatedValues.put(PlayerContract.PlayerEntry.PASSWORD_USED, 1);
-
-            mContext.getContentResolver().update(
-                    PlayerContract.PlayerEntry.CONTENT_URI, updatedValues, PlayerContract.PlayerEntry._ID + "= ?",
-                    new String[]{Long.toString(playerRowId)});
-        }
-
-        private String generatePassword() {
-            PlayerPassword playerPassword = new PlayerPassword(playerName);
-            return playerPassword.generatePassword();
-        }
-
-        private void sendPasswordNotification(String password) {
-            new PasswordNotification(mContext, password).send();
-        }
+    public long getPlayerRowId(int position) {
+        Cursor cursor = (Cursor)getItem(position);
+        long playerRowId = cursor.getInt(cursor.getColumnIndex(PlayerContract.PlayerEntry._ID));
+        return playerRowId;
     }
 }
